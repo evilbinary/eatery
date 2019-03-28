@@ -27,7 +27,15 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.content {
+  display: flex;
+  height: 100%;
+  background: white;
+  width: 100%;
 }
