@@ -32,7 +32,6 @@ export class Message extends Base {
   };
   render() {
     const { list, notice } = this.state.message;
-    console.log('message', this.state.message);
     return (
       <div className="message">
         {notice ? (
@@ -47,23 +46,24 @@ export class Message extends Base {
         ) : null}
 
         {list.map((item: any, index) => (
-         
           <div key={item.id}>
             {/* <WingBlank> */}
-              <WhiteSpace size="lg" />
-              <Card>
-                <Card.Header title={item.title} extra={moment(item.date).format('MM-DD HH:mm:ss')} />
-                <Card.Body>{item.content}</Card.Body>
+            <WhiteSpace size="xl" />
+            <Card>
+              <Card.Header
+                title={item.title}
+                extra={moment(item.date).format('MM月DD日 HH:mm:ss')}
+              />
+              <Card.Body>
+                <div className="content"> {item.content}</div>
+              </Card.Body>
 
-                <Card.Footer
-                  content={item.footer}
-                  extra={item.footerExtra}
-                />
-              </Card>
+              <Card.Footer content={item.footer} extra={item.footerExtra} />
+            </Card>
             {/* </WingBlank> */}
           </div>
         ))}
-        <WhiteSpace size="lg" />
+        <WhiteSpace size="xl" />
       </div>
     );
   }

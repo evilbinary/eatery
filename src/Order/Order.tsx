@@ -40,19 +40,14 @@ export class Order extends Base {
   }
   render() {
     const orderList = this.state.orderList;
-    console.log('orderList=>', orderList);
-
     return (
       <div className="order">
         {orderList.map((item: any, index) => (
           <div key={item.id}>
             <WingBlank>
               <WhiteSpace size="lg" />
-              <Card >
-                <Card.Header
-                  title={'订单编号：' + item.id}
-                  thumb={item.icon}
-                />
+              <Card>
+                <Card.Header title={'订单编号：' + item.id} thumb={item.icon} />
                 <Card.Body>
                   <Flex
                     direction="column"
@@ -64,7 +59,8 @@ export class Order extends Base {
                     <Flex.Item>数量：{item.count}份</Flex.Item>
                     <WhiteSpace size="sm" />
                     <Flex.Item>
-                      时间：{moment(item.date).format('YYYY-MM-DD HH:mm:ss')}
+                      时间：
+                      {moment(item.date).format('YYYY年MM月DD日 HH:mm:ss')}
                     </Flex.Item>
                     <WhiteSpace size="sm" />
                     <Flex.Item>备注：{item.note}</Flex.Item>
