@@ -15,7 +15,7 @@ export class Base extends Component<any, any> {
           !config.headers[this.tokenSymbol]
         ) {
           const token = this.getToken();
-          console.log('getToken ', token);
+          // console.log('getToken ', token);
           config.headers[this.tokenSymbol] = token;
         }
         return config;

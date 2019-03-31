@@ -41,8 +41,6 @@ export class Book extends Base {
           ...values,
           type:values['type'][0]
         }
-        console.log('data', data);
-
         this.client
           .post('order/submit', data)
           .then(ret => {
@@ -51,7 +49,7 @@ export class Book extends Base {
             } else {
               Toast.fail(ret.data.message, 1);
             }
-            console.log('ret', ret);
+            this.props.form.resetFields();
           })
           .catch(err => console.log(err));
       } else {

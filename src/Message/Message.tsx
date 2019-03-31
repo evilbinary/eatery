@@ -1,40 +1,69 @@
 import React, { Component } from 'react';
-import { Button, NoticeBar, WhiteSpace, Card } from 'antd-mobile';
+import {
+  WingBlank,
+  Toast,
+  Flex,
+  NoticeBar,
+  WhiteSpace,
+  Card
+} from 'antd-mobile';
 import { MarqueeProps } from 'antd-mobile/lib/notice-bar/Marquee';
 import './Message.less';
+import { Base } from '../Common/Base';
+import moment from 'moment';
 
-export class Message extends Component {
+export class Message extends Base {
+  componentDidMount() {
+    this.client.get('/message').then(ret => {
+      if (ret.data.code === 200) {
+        this.setState({
+          message: ret.data.result
+        });
+      } else {
+        Toast.fail(ret.data.message, 1);
+      }
+    });
+  }
+  state = {
+    message: {
+      list: [],
+      notice: null
+    }
+  };
   render() {
+    const { list, notice } = this.state.message;
+    console.log('message', this.state.message);
     return (
       <div className="message">
-        <NoticeBar
-          marqueeProps={
-            { loop: true, style: { padding: '0 7.5px' } } as MarqueeProps
-          }
-        >
-          通知:
-          通知，是运用广泛的知照性公文。用来发布法规、规章，转发上级机关、同级机关和不相隶属机关的公文，批转下级机关的公文，要求下级机关办理某项事务等。通知，一般由标题、主送单位（受文对象）、正文、落款四部分组成。
-        </NoticeBar>
+        {notice ? (
+          <NoticeBar
+            marqueeProps={
+              { loop: true, style: { padding: '0 7.5px' } } as MarqueeProps
+            }
+          >
+            通知:
+            {notice}
+          </NoticeBar>
+        ) : null}
 
+        {list.map((item: any, index) => (
+         
+          <div key={item.id}>
+            {/* <WingBlank> */}
+              <WhiteSpace size="lg" />
+              <Card>
+                <Card.Header title={item.title} extra={moment(item.date).format('MM-DD HH:mm:ss')} />
+                <Card.Body>{item.content}</Card.Body>
+
+                <Card.Footer
+                  content={item.footer}
+                  extra={item.footerExtra}
+                />
+              </Card>
+            {/* </WingBlank> */}
+          </div>
+        ))}
         <WhiteSpace size="lg" />
-        <Card full>
-          <Card.Header
-            title="通知标题"
-            thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"
-            extra={<span>this is extra</span>}
-          />
-          <Card.Body>
-            <p>
-              根据公司作自时间规定并结合员工实际情况需要，公司食堂就餐时间规定如下：
-              早餐：7：00----- 7：30
-              中餐：12：00-----12：30{' '}
-            </p>
-          </Card.Body>
-          <Card.Footer
-            content="footer content"
-            extra={<div>extra footer content</div>}
-          />
-        </Card>
       </div>
     );
   }
