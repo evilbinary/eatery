@@ -1,43 +1,31 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button, Tabs, Badge } from 'antd-mobile';
-import { Book } from './Book/Book';
-import { Message } from './Message/Message';
-import { Order } from './Order/Order';
+
+import { Login } from './Login/Login';
+import { Home } from './Home/Home';
+
 import { createForm, formShape } from 'rc-form';
+
+import { Route, Redirect, Switch } from 'react-router-dom';
+import { Register } from './Register/Register';
+import { AuthRoute } from './AuthRoute/AuthRoute';
+import { About } from './About/About';
 
 class App extends Component {
   render() {
-    const tabs = [
-      { title: <Badge>我要订餐</Badge> },
-      { title: <Badge>我的订单</Badge> },
-      { title: <Badge dot>公告</Badge> }
-    ];
-    const BookForm = createForm()(Book);
+ 
+    const LoginForm = createForm()(Login);
+    const RegisterForm = createForm()(Register);
+
     return (
       <div className="App">
-        <Tabs
-          tabs={tabs}
-          initialPage={0}
-          onChange={(tab, index) => {
-            console.log('onChange', index, tab);
-          }}
-          onTabClick={(tab, index) => {
-            console.log('onTabClick', index, tab);
-          }}
-        >
-          <div className="content">
-            <BookForm />
-          </div>
-          <div className="content">
-            <Order />
-          </div>
-
-          <div className="content">
-            <Message />
-          </div>
-        </Tabs>
+        <Switch>
+          <AuthRoute exact path="/" component={Home} />
+          <Route path="/login" component={LoginForm} />
+          <Route path="/register" component={RegisterForm} />
+          <Route  component={About} />
+        </Switch>
       </div>
     );
   }

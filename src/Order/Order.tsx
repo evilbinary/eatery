@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Card, WhiteSpace, Flex } from 'antd-mobile';
 import './Order.less';
+import { Base } from '../Common/Base';
 
-export class Order extends Component {
+export class Order extends Base {
   render() {
     return (
       <div className="order">

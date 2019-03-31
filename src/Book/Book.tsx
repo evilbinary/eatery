@@ -13,13 +13,12 @@ import {
 import { PickerData } from 'antd-mobile/lib/picker/PropsType';
 import { createForm, formShape } from 'rc-form';
 import './Book.less';
-import axios from 'axios';
-import { client } from '../client';
+import { Base } from '../Common/Base';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 
-export class Book extends Component<any> {
+export class Book extends Base {
   constructor(props: any) {
     super(props);
   }
@@ -38,10 +37,20 @@ export class Book extends Component<any> {
     e.preventDefault();
     this.props.form.validateFields((error, values) => {
       if (!error) {
-        console.log('ok', values);
-        client
-          .post('order/submit', values)
+        const data={
+          ...values,
+          type:values['type'][0]
+        }
+        console.log('data', data);
+
+        this.client
+          .post('order/submit', data)
           .then(ret => {
+            if (ret.data.code === 200) {
+              Toast.success(ret.data.message, 1);
+            } else {
+              Toast.fail(ret.data.message, 1);
+            }
             console.log('ret', ret);
           })
           .catch(err => console.log(err));
@@ -59,7 +68,7 @@ export class Book extends Component<any> {
 
   render() {
     let errors;
-    const { getFieldProps, getFieldError } = this.props.form;
+    const { getFieldProps, getFieldError, getFieldValue } = this.props.form;
     const Item = List.Item;
     const Brief = Item.Brief;
     const type = [
@@ -93,20 +102,22 @@ export class Book extends Component<any> {
 
           <Picker
             {...getFieldProps('type', {
-              initialValue: 1,
-              rules: [{ required: true }]
+              // initialValue: 1,
+              rules: [{ required: true }],
             })}
             data={type as PickerData[]}
+            value={getFieldValue('type')}
             cols={1}
-            className="forss"
           >
-            <List.Item arrow="horizontal">类型</List.Item>
+            <List.Item arrow="horizontal">
+              类型{getFieldValue('type')}
+            </List.Item>
           </Picker>
           {(errors = getFieldError('type')) ? errors.join(',') : null}
 
           <InputItem
             {...getFieldProps('count', {
-              initialValue: 0,
+              // initialValue: 0,
               rules: [
                 { required: true, type: 'string', message: '数量输入不正确' }
               ]
