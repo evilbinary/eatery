@@ -32,11 +32,12 @@ export class Register extends Base {
     }
   }
   onSubmit = () => {
-    console.log('onSubmit',this.props.form.getFieldsValue() );
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
+        let data=this.props.form.getFieldsValue();
+        data.password= new Buffer(data.password).toString('base64');
         this.client
-          .post('/register', this.props.form.getFieldsValue())
+          .post('/register', data)
           .then(res => {
             if (res.data.code === 200) {
               Toast.success(res.data.message, 1);
