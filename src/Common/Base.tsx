@@ -35,7 +35,6 @@ export class Base extends Component<any, any> {
     }
   }
   saveToken(res: AxiosResponse) {
-    console.log('res.headers=>',res.headers);
     this.setToken(res.headers[this.tokenSymbol]);
   }
   verifyToken(token){

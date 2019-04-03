@@ -52,15 +52,14 @@ export class Login extends Base {
           >
             密码
           </InputItem>
-          <Item>
-            <WhiteSpace />
-            <Button type="primary" onClick={this.onSubmit}>
-              登录
-            </Button>
-            <WhiteSpace />
-            <Button onClick={this.register}>注册</Button>
-          </Item>
         </List>
+        <WingBlank>
+          <Button type="primary" onClick={this.onSubmit}>
+            登录
+          </Button>
+          <WhiteSpace />
+          <Button onClick={this.register}>注册</Button>
+        </WingBlank>
       </div>
     );
   }
@@ -75,20 +74,18 @@ export class Login extends Base {
   onSubmit = () => {
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
-        let data=this.props.form.getFieldsValue();
-        data.password= new Buffer(data.password).toString('base64');
-        this.client
-          .post('/login', data)
-          .then(res => {
-            console.log('res',res);
-            if (res.data.code === 200) {
-              this.saveToken(res);
-              Toast.success(res.data.message, 1);
-              this.redirect('/');
-            } else {
-              Toast.fail(res.data.message, 1);
-            }
-          });
+        let data = this.props.form.getFieldsValue();
+        data.password = new Buffer(data.password).toString('base64');
+        this.client.post('/login', data).then(res => {
+          console.log('res', res);
+          if (res.data.code === 200) {
+            this.saveToken(res);
+            Toast.success(res.data.message, 1);
+            this.redirect('/');
+          } else {
+            Toast.fail(res.data.message, 1);
+          }
+        });
       } else {
         // new Error('请输入至少3个字符的账号')
       }

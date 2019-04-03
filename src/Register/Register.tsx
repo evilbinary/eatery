@@ -24,28 +24,26 @@ export class Register extends Base {
       callback(new Error('请输入至少3个字符的用户名'));
     }
   };
-  validatePassword =(rule, value, callback) => {
+  validatePassword = (rule, value, callback) => {
     if (value && value.length >= 3) {
       callback();
     } else {
       callback(new Error('请输入至少3个字符的密码'));
     }
-  }
+  };
   onSubmit = () => {
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
-        let data=this.props.form.getFieldsValue();
-        data.password= new Buffer(data.password).toString('base64');
-        this.client
-          .post('/register', data)
-          .then(res => {
-            if (res.data.code === 200) {
-              Toast.success(res.data.message, 1);
-              this.props.location.pathname = '/';
-            } else {
-              Toast.fail(res.data.message, 1);
-            }
-          });
+        let data = this.props.form.getFieldsValue();
+        data.password = new Buffer(data.password).toString('base64');
+        this.client.post('/register', data).then(res => {
+          if (res.data.code === 200) {
+            Toast.success(res.data.message, 1);
+            this.props.location.pathname = '/';
+          } else {
+            Toast.fail(res.data.message, 1);
+          }
+        });
       } else {
         // new Error('请输入至少3个字符的账号')
       }
@@ -64,8 +62,8 @@ export class Register extends Base {
         <List
           //   renderHeader={() => '登录'}
           renderFooter={() =>
-            getFieldError('name') && getFieldError('name').join(',') ||
-            getFieldError('password') && getFieldError('password').join(',')
+            (getFieldError('name') && getFieldError('name').join(',')) ||
+            (getFieldError('password') && getFieldError('password').join(','))
           }
         >
           <InputItem
@@ -86,27 +84,25 @@ export class Register extends Base {
             用户名
           </InputItem>
           <InputItem
-            {...getFieldProps('password',{
+            {...getFieldProps('password', {
               rules: [
                 { required: true, message: '请输入密码' },
                 { validator: this.validatePassword }
               ]
-            })
-          }
+            })}
             placeholder="请输入密码"
             type="password"
           >
             密码
           </InputItem>
-          <Item>
-            <WhiteSpace />
-            <Button type="primary" onClick={this.onSubmit}>
-              注册
-            </Button>
-            <WhiteSpace />
-            <Button onClick={this.login}>登录</Button>
-          </Item>
         </List>
+        <WingBlank>
+          <Button type="primary" onClick={this.onSubmit}>
+            注册
+          </Button>
+          <WhiteSpace />
+          <Button onClick={this.login}>登录</Button>
+        </WingBlank>
       </div>
     );
   }

@@ -37,10 +37,10 @@ export class Book extends Base {
     e.preventDefault();
     this.props.form.validateFields((error, values) => {
       if (!error) {
-        const data={
+        const data = {
           ...values,
-          type:values['type'][0]
-        }
+          type: values['type'][0]
+        };
         this.client
           .post('order/submit', data)
           .then(ret => {
@@ -53,10 +53,10 @@ export class Book extends Base {
           })
           .catch(err => console.log(err));
       } else {
-        for (const i of Object.keys(error)) {
-          const msg = error[i].errors.map(o => o.message).join(',');
-          Toast.fail(msg, 1);
-        }
+        // for (const i of Object.keys(error)) {
+        //   const msg = error[i].errors.map(o => o.message).join(',');
+        //   Toast.fail(msg, 1);
+        // }
       }
     });
   };
@@ -85,7 +85,12 @@ export class Book extends Base {
     ];
     return (
       <div className="book-list">
-        <List>
+        <List
+          renderFooter={() =>
+            (getFieldError('type') && getFieldError('type').join(',')) ||
+            (getFieldError('count') && getFieldError('count').join(','))
+          }
+        >
           <DatePicker
             {...getFieldProps('date', {
               initialValue: this.state.date,
@@ -96,12 +101,10 @@ export class Book extends Base {
           >
             <List.Item arrow="horizontal">日期</List.Item>
           </DatePicker>
-          {(errors = getFieldError('type')) ? errors.join(',') : null}
-
           <Picker
             {...getFieldProps('type', {
               // initialValue: 1,
-              rules: [{ required: true }],
+              rules: [{ required: true, message: '请选择类型' }]
             })}
             data={type as PickerData[]}
             value={getFieldValue('type')}
@@ -111,7 +114,6 @@ export class Book extends Base {
               类型{getFieldValue('type')}
             </List.Item>
           </Picker>
-          {(errors = getFieldError('type')) ? errors.join(',') : null}
 
           <InputItem
             {...getFieldProps('count', {
@@ -153,7 +155,6 @@ export class Book extends Base {
             count={30}
           />
         </List>
-        <WhiteSpace size="xl" />
         <WingBlank size="md">
           <Button onClick={this.onSubmit} type="primary">
             提交
