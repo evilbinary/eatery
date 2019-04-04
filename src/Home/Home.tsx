@@ -8,6 +8,10 @@ import { Link } from 'react-router-dom';
 import './Home.less';
 
 export class Home extends Component {
+  state = {
+    orderList: [],
+    messageList: []
+  };
   render() {
     const tabs = [
       { title: <Badge>我要订餐</Badge> },
@@ -22,7 +26,12 @@ export class Home extends Component {
           tabs={tabs}
           initialPage={0}
           onChange={(tab, index) => {
-            // console.log('onChange', index, tab);
+            console.log('onChange', index, tab);
+            if (index === 1) {
+              this.setState({ orderList: [] });
+            } else if (index === 2) {
+              this.setState({ messageList: [] });
+            }
           }}
           onTabClick={(tab, index) => {
             // console.log('onTabClick', index, tab);
@@ -32,14 +41,14 @@ export class Home extends Component {
             <BookForm />
           </div>
           <div className="content">
-            <Order />
+            <Order orderList={this.state.orderList} />
           </div>
 
           <div className="content">
-            <Message />
+            <Message messageList={this.state.messageList} />
           </div>
         </Tabs>
-        <Link className="footer" to='./about'>
+        <Link className="footer" to="./about">
           ©Copyright 2019, evilbinary.org.
         </Link>
       </div>

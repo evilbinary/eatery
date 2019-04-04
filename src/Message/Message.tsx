@@ -14,6 +14,9 @@ import moment from 'moment';
 
 export class Message extends Base {
   componentDidMount() {
+    this.getMessage();
+  }
+  getMessage(){
     this.client.get('/message').then(ret => {
       if (ret.data.code === 200) {
         this.setState({
@@ -30,6 +33,9 @@ export class Message extends Base {
       notice: null
     }
   };
+  componentWillReceiveProps(){
+    this.getMessage();
+  }
   render() {
     const { list, notice } = this.state.message;
     return (

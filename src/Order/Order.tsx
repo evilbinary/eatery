@@ -22,8 +22,7 @@ export class Order extends Base {
       value: 3
     }
   ];
-  componentWillMount() {}
-  componentDidMount() {
+  getList(){
     this.client.get('order/list').then(ret => {
       if (ret.data.code === 200) {
         this.setState({
@@ -33,6 +32,14 @@ export class Order extends Base {
         Toast.fail(ret.data.message, 1);
       }
     });
+  }
+  componentWillReceiveProps(){
+    console.log('componentWillReceiveProps');
+    this.getList();
+  }
+  componentWillMount() {}
+  componentDidMount() {
+    this.getList();
   }
   getTypeName(type) {
     const i: any = this.type.find(o => o.value === type);
