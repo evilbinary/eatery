@@ -14,6 +14,7 @@ import { PickerData } from 'antd-mobile/lib/picker/PropsType';
 import { createForm, formShape } from 'rc-form';
 import './Book.less';
 import { Base } from '../Common/Base';
+import { conf } from '../config';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
@@ -64,6 +65,13 @@ export class Book extends Base {
     Toast.fail(e, 1);
   }
 
+  validateCount = (rule, value, callback) => {
+    if (value && value > conf.maxNumber) {
+      callback();
+    } else {
+      callback(new Error(`不能超过${conf.maxNumber}份`));
+    }
+  };
   render() {
     let errors;
     const { getFieldProps, getFieldError, getFieldValue } = this.props.form;
@@ -119,7 +127,9 @@ export class Book extends Base {
             {...getFieldProps('count', {
               // initialValue: 0,
               rules: [
-                { required: true, type: 'string', message: '数量输入不正确' }
+                { required: true, type: 'string', message: '数量输入不正确' },
+                { validator: this.validateCount }
+
               ]
               // normalize: (v: any, prev: any) => {
               //   if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {

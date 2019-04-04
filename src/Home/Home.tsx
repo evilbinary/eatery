@@ -6,6 +6,7 @@ import { Message } from '../Message/Message';
 import { Order } from '../Order/Order';
 import { Link } from 'react-router-dom';
 import './Home.less';
+import { conf } from '../config';
 
 export class Home extends Component {
   state = {
@@ -49,7 +50,7 @@ export class Home extends Component {
           </div>
         </Tabs>
         <Link className="footer" to="./about">
-          ©Copyright 2019, evilbinary.org.
+          {conf.copyright}
         </Link>
       </div>
     );

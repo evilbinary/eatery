@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { client, baseApiUrl } from './client';
+import { client } from './client';
 import { AxiosResponse } from 'axios';
+import { conf } from '../config';
 
 export class Base extends Component<any, any> {
   client = client;
@@ -11,7 +12,7 @@ export class Base extends Component<any, any> {
     client.interceptors.request.use(
       config => {
         if (
-          config.baseURL === baseApiUrl &&
+          config.baseURL === conf.apiUrl &&
           !config.headers[this.tokenSymbol]
         ) {
           const token = this.getToken();
