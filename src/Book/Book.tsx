@@ -5,6 +5,7 @@ import {
   DatePicker,
   Picker,
   InputItem,
+  Radio,
   TextareaItem,
   WhiteSpace,
   WingBlank,
@@ -15,22 +16,26 @@ import { createForm, formShape } from 'rc-form';
 import './Book.less';
 import { Base } from '../Common/Base';
 import { conf } from '../config';
+import moment from 'moment';
 
-const nowTimeStamp = Date.now();
-const now = new Date(nowTimeStamp);
 
 export class Book extends Base {
   constructor(props: any) {
     super(props);
+
+    const now = moment();
+    let type = this.getTodayDefaultType();
+    this.state = {
+      date: type > 0 ? now.toDate() : now.add(1, 'days').toDate(),  // 自动选择今日或明日
+      type: [type || 1], // 今日或明日早餐
+      time: now
+    };
   }
   static propTypes = {
     form: formShape
   };
 
-  state = {
-    date: now,
-    time: now
-  };
+
   inputRef: any;
   customFocusInst: any;
 
@@ -72,6 +77,31 @@ export class Book extends Base {
       callback(new Error(`不能超过${conf.maxNumber}份`));
     }
   };
+
+  /*
+  根据当前时间和就餐时间段表数据，智能选择默认今日订餐类型
+  @return 0 今日不能订餐
+  */
+  getTodayDefaultType() {
+    let typeTimeRanges = [ // 这个数据可能从后端来
+      {begin: '7:00'},
+      {begin: '12:00'},
+      {begin: '18:00'}
+    ];
+
+    let result = 0;
+    const now = moment('16:00', 'HH:mm');
+    for (let i = 0; i < typeTimeRanges.length; i++) {
+      let begin = moment(typeTimeRanges[i].begin, 'HH:mm');
+      if (now.diff(begin, 'minutes') < -30) { // 如果在就餐30分钟之前或者更早
+        result = i + 1;
+        break;
+      }
+    }
+
+    return result;
+  }
+
   render() {
     let errors;
     const { getFieldProps, getFieldError, getFieldValue } = this.props.form;
@@ -104,14 +134,16 @@ export class Book extends Base {
               initialValue: this.state.date,
               rules: [{ required: true }]
             })}
+            mode="date"
             value={this.state.date}
+            minDate={this.state.date} 
             onChange={date => this.setState({ date })}
           >
             <List.Item arrow="horizontal">日期</List.Item>
           </DatePicker>
           <Picker
             {...getFieldProps('type', {
-              // initialValue: 1,
+              initialValue: this.state.type,
               rules: [{ required: true, message: '请选择类型' }]
             })}
             data={type as PickerData[]}
@@ -119,13 +151,13 @@ export class Book extends Base {
             cols={1}
           >
             <List.Item arrow="horizontal">
-              类型{getFieldValue('type')}
+              类型
             </List.Item>
           </Picker>
 
           <InputItem
             {...getFieldProps('count', {
-              // initialValue: 0,
+              initialValue: 1,
               rules: [
                 { required: true, type: 'string', message: '数量输入不正确' },
                 { validator: this.validateCount }
