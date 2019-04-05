@@ -1,6 +1,6 @@
-开源点餐项目
+eatery 食堂点餐
 
-https://github.com/evilbinary
+https://github.com/evilbinary/eatery
 
 ## 如何运行
 
@@ -16,3 +16,5 @@ https://github.com/evilbinary
 ### `npm run build`
 
 ### `serve -s build `
+# eatery
+
