@@ -66,7 +66,7 @@ export class Book extends Base {
   }
 
   validateCount = (rule, value, callback) => {
-    if (value && value > conf.maxNumber) {
+    if (value && value < conf.maxNumber) {
       callback();
     } else {
       callback(new Error(`不能超过${conf.maxNumber}份`));
