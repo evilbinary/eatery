@@ -159,7 +159,7 @@ export class Book extends Base {
             {...getFieldProps('count', {
               initialValue: 1,
               rules: [
-                { required: true, type: 'string', message: '数量输入不正确' },
+                { required: true, message: '数量输入不正确' },
                 { validator: this.validateCount }
 
               ]
