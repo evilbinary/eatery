@@ -10,7 +10,7 @@
     "@types/react-dom": "16.8.3",
     "antd-mobile": "^2.2.11",
     "axios": "^0.21.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "rc-form": "^2.4.3",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
